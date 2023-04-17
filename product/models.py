@@ -2,7 +2,8 @@ from django.db import models
 from PIL import Image
 import os
 from django.conf import settings
-
+from django.utils.text import slugify
+from utils import utils
 # Create your models here.
 
 
@@ -11,19 +12,27 @@ class Product(models.Model):
     short_description = models.TextField(max_length=255)
     long_description = models.TextField()
     image = models.ImageField(
-        upload_to='product_images/%Y/%m', blank=True, null=True
+        upload_to='product_images/%Y/%m/', blank=True, null=True
     )
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     price = models.FloatField()
     sale_price = models.FloatField(default=0)
     type = models.CharField(
         default='V',
         max_length=1,
         choices=(
-            ('V', 'variation'),
+            ('V', 'variable'),
             ('S', 'simple')
         )
     )
+
+    def get_format_price(self):
+        return utils.formatting_price(self.price)
+    get_format_price.short_description = 'Price'
+
+    def get_format_sale_price(self):
+        return utils.formatting_price(self.sale_price)
+    get_format_sale_price.short_description = 'Sale Price'
 
     @staticmethod
     def resize_image(img, new_width=800):
@@ -47,6 +56,9 @@ class Product(models.Model):
         print('Imagem foi redimensionada')
 
     def save(self, *args, **kwargs):
+        if not self.slug:
+            slug = f'{slugify(self.name)}'
+            self.slug = slug
         super().save(*args, **kwargs)
 
         max_image_size = 800
@@ -60,18 +72,10 @@ class Product(models.Model):
 
 class Variation(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    nome = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
     price = models.FloatField()
     sale_price = models.FloatField(default=0)
     inventory = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return self.name or self.product.name
-
-    class Meta:
-        verbose_name = 'Variation'
-        verbose_name_plural = 'Variations'
-
-
-class Order(models.Model):
-    pass

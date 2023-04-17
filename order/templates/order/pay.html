@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block title %}Payment | {% endblock %} {% load
+omfilters %} {% load static %} {% block conteudo %}
+<div class="row">
+  <div class="col">
+    <h3>Chose a form of payment</h3>
+    <p>Para o desenvolvedor: adicione seu método de pagamento preferido.</p>
+  </div>
+</div>
+
+{% include 'parcials/_order.html' %}
+
+<div class="row mt-4">
+  <div class="col">
+    <a href="#" class="btn btn-primary btn-block btn-lg">Pay</a>
+  </div>
+</div>
+
+{% endblock %}
