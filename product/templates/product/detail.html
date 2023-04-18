@@ -28,31 +28,26 @@
                         {% endif %}
                     </p>
 
-                    <form action="/addtocart/" id="form-add-to-cart">
+                    <form action="{% url 'product:addtocart' %}"
+                        id="form-add-to-cart">
                         <div class="form-group">
-                            <select id="select-variation" name="vid"
+                            <select
+                                id="select-variation"
+                                name="vid"
                                 class="form-control form-control-lg">
-                                {% for variation in product.variation_set.all%}
+                                {% for variation in product.variation_set.all %}
                                 {% if variation.sale_price %}
                                 <option
                                     data-price="{{variation.price|formatting_price}}"
                                     data-sale-price="{{variation.sale_price|formatting_price}}"
                                     value="{{variation.id}}">
-                                    {% if variation.name %}
-                                    {{ variation.name }}
-                                    {% else %}
-                                    {{ variation.name }}
-                                    {%endif%}
+                                    {{variation}}
                                 </option>
                                 {% else %}
                                 <option
                                     data-price="{{variation.price|formatting_price}}"
                                     value="{{variation.id}}">
-                                    {% if variation.product.name %}
-                                    {{ variation.name }}
-                                    {% else %}
-                                    {{ variation.product.name }}
-                                    {%endif%}
+                                    {{variation}}
                                 </option>
                                 {% endif %}
                                 {% endfor %}
@@ -64,7 +59,7 @@
                                 btn-block">
                                 <i class="fa fa-shopping-cart"
                                     aria-hidden="true"></i>
-                                Add to cart
+                                Add to
                             </button>
                         </div>
                     </form>
