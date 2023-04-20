@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block titulo %}Create profile| {% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    {% if not request.user.is_authenticated %}
+    <div class="col-lg mt-3">
+        <h4>Login</h4>
+        <p>If you already have a user, login here:</p>
+
+        <form method="POST" action="{% url 'perfil:login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="InputUsuario1">User</label>
+                <input type="text" name='username' class="form-control" id="InputUsuario1"
+                    aria-describedby="usuarioHelp" placeholder="Type a username">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password:</label>
+                <input name='password' type="password" class="form-control" id="exampleInputPassword1"
+                    placeholder="Type a passoword">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Login</button>
+        </form>
+
+
+    </div>
+    {% endif %}
+
+    <div class="col-lg mt-3">
+
+        {% block titulocadastro %}
+        <h4>SignUp</h4>
+        <p>
+            If you dont have a user, use the form below to signup
+        </p>
+        {% endblock %}
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ userform|crispy }}
+            {{ perfilform|crispy }}
+
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class='btn btn-primary btn-block btn-lg'>
+                        SignUp
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

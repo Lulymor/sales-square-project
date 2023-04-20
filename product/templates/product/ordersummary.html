@@ -1,0 +1,75 @@
+{% extends 'base.html' %} {% load filters %} 
+{% block titulo %}Order Summary{% endblock %} 
+{% block content %}
+
+<div class="row mb-5">
+  <div class="col-lg">
+    <h2>Order Summary</h2>
+
+    <p class="lead">User data</p>
+    <p>
+      Need to edit it? <a href="{% url 'perfil:criar' %}">click here</a>
+    </p>
+    <dl class="row">
+      <dt class="col-lg-2">Name:</dt>
+      <dd class="col-lg-4">{{ usuario.first_name }}</dd>
+      <dt class="col-lg-2">Last Name:</dt>
+      <dd class="col-lg-4">{{ usuario.last_name }}</dd>
+
+      <dt class="col-lg-2">Age:</dt>
+      <dd class="col-lg-4">{{ usuario.perfil.idade }}</dd>
+      <dt class="col-lg-2">Date of Birth:</dt>
+      <dd class="col-lg-4">{{ usuario.perfil.data_nascimento }}</dd>
+
+
+      <dt class="col-lg-2">E-mail:</dt>
+      <dd class="col-lg-4">{{ usuario.email }}</dd>
+    </dl>
+
+    <p class="lead">Address</p>
+    <p>
+      Need to edit it? <a href="{% url 'perfil:criar' %}">click here</a>
+    </p>
+    <dl class="row">
+      <dt class="col-lg-2">Address:</dt>
+      <dd class="col-lg-4">{{ usuario.perfil.endereco }}</dd>
+      <dt class="col-lg-2">Number:</dt>
+      <dd class="col-lg-4">{{ usuario.perfil.numero }}</dd>
+
+      <dt class="col-lg-2">Address 2:</dt>
+      <dd class="col-lg-4">{{ usuario.perfil.complemento }}</dd>
+      <dt class="col-lg-2">City:</dt>
+      <dd class="col-lg-4">{{ usuario.perfil.bairro }}</dd>
+
+    </dl>
+  </div>
+</div>
+
+<div class="row mt-3">
+  <div class="col">
+    <h3>Order Summary</h3>
+    <p class="lead">Products, quantity and prices you picked.</p>
+
+    {% include 'partials/_cart.html' %}
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col">
+    <p class="lead text-center">
+      <span class="font-weight-bold">Total:</span> {{cart|cart_total|formatting_price }}
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <a
+      class="btn btn-block btn-primary btn-lg"
+      href="{% url 'order:saveorder' %}"
+    >
+      Finalize and pay
+    </a>
+  </div>
+</div>
+
+{% endblock %}

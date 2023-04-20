@@ -4,7 +4,7 @@ from . import views
 app_name = 'order'
 
 urlpatterns = [
-    path('pay/', views.Pay.as_view(), name='pay'),
-    path('closeorder/', views.CloseOrder.as_view(), name='closeorder'),
-    path('detail/', views.Detail.as_view(), name='detail')
+    path('pay/<int:pk>', views.Pay.as_view(), name='pay'),
+    path('detail/<int:pk>', views.Detail.as_view(), name='detail'),
+    path('list/', views.List.as_view(), name='list')
 ]

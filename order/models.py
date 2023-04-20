@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     total = models.FloatField()
+    qtd_total = models.PositiveIntegerField(default=0)
     status = models.CharField(
         default='C',
         max_length=1,
@@ -31,7 +32,7 @@ class ItemOrdered(models.Model):
     variation_id = models.PositiveIntegerField()
     price = models.FloatField()
     sale_price = models.FloatField(default=0)
-    amount = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField()
     image = models.CharField(max_length=2000)
 
     def __str__(self):

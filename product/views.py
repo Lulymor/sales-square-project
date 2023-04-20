@@ -7,6 +7,7 @@ from django.contrib import messages
 from . import models
 
 from pprint import pprint
+from perfil.models import Perfil
 
 
 class ProductList(ListView):
@@ -80,7 +81,7 @@ class AddToCart(View):
                     f'product "{product_name}". {variation_inventory}x '
                     f'Added to cart.'
                 )
-                quantidade_carrinho = variation_inventory
+                quantity_cart = variation_inventory
 
             cart[variation_id]['quantity'] = quantity_cart
             cart[variation_id]['quantity_price'] = unity_price * \
@@ -152,6 +153,30 @@ class Cart(View):
         return render(self.request, 'product/cart.html', context)
 
 
-class Finalize(View):
+class OrderSummary(View):
     def get(self, *args, **kwargs):
-        return HttpResponse('Finalize')
+        if not self.request.user.is_authenticated:
+            return redirect('perfil:criar')
+
+        perfil = Perfil.objects.filter(usuario=self.request.user).exists()
+
+        if not perfil:
+            messages.error(
+                self.request,
+                'Usuário sem perfil.'
+            )
+            return redirect('perfil:criar')
+
+        if not self.request.session.get('cart'):
+            messages.error(
+                self.request,
+                'Carrinho vazio.'
+            )
+            return redirect('product:list')
+
+        contexto = {
+            'usuario': self.request.user,
+            'cart': self.request.session['cart'],
+        }
+
+        return render(self.request, 'product/ordersummary.html', contexto)
