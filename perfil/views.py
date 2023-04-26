@@ -11,6 +11,7 @@ from . import models
 from . import forms
 
 
+
 class BasePerfil(View):
     template_name = 'perfil/criar.html'
 
@@ -22,9 +23,7 @@ class BasePerfil(View):
         self.perfil = None
 
         if self.request.user.is_authenticated:
-            self.perfil = models.Perfil.objects.filter(
-                usuario=self.request.user
-            ).first()
+            self.perfil = models.Perfil.objects.filter(usuario=self.request.user).first()
 
             self.context = {
                 'userform': forms.UserForm(
